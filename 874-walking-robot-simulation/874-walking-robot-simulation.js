@@ -4,66 +4,29 @@
  * @return {number}
  */
 var robotSim = function(commands, obstacles) {
-    let farthest = 0;
-    const obstacleMap = createObstacleMap(obstacles);
-    const pos = [0,0];
-    const directions = [[0,1], [1,0], [0,-1], [-1,0]];
+    const dirs = [[0,1], [1,0], [0,-1], [-1,0]];
+    const blocks = new Set(obstacles.map(v => v[0]+':'+v[1]));
+    console.log(blocks);
+    let max = 0;
+    let x = 0;
+    let y = 0;
     let d = 0;
     for (let command of commands) {
-        if (command === -2) {
-            if (d === 0) {
-                d = 3;
-            } else {
-                d--;
-            }
-        } else if (command === -1) {
-            if (d === 3) {
-                d = 0;
-            } else {
-                d++;
-            }
+        if (command === -1) {
+            d = (d+1)%4;
+        } else if (command === -2) {
+            d = (d+3)%4;
         } else {
-            const move = directions[d];
-            const magnitudes = move.map(x => x * command); // e.g.: [0,-1] * 7 = [0,-7]
-            for (let i=0; i<=1; i++) {
-                let magnitude = magnitudes[i];
-                while (magnitude < 0) {
-                    const next = [...pos];
-                    next[i]--;
-                    const [nextx, nexty] = next;
-                    if (!obstacleMap[nextx] || !obstacleMap[nextx][nexty]) {
-                        pos[i]--;
-                        magnitude++;
-                    } else {
-                        break;
-                    }
+            for (let i=0; i<command; i++) {
+                const [dx, dy] = dirs[d];
+                if (blocks.has(`${x+dx}:${y+dy}`)) {
+                    break;
                 }
-                while (magnitude > 0) {
-                    const next = [...pos];
-                    next[i]++;
-                    const [nextx, nexty] = next;
-                    if (!obstacleMap[nextx] || !obstacleMap[nextx][nexty]) {
-                        pos[i]++;
-                        magnitude--;
-                    } else {
-                        break;
-                    }
-                    // console.log(pos);
-                }
-                const distance = pos[0]**2 + pos[1]**2;
-                if (distance > farthest) farthest = distance;
+                x += dx;
+                y += dy;
             }
         }
+        max = Math.max(max, x**2 + y**2);
     }
-    return farthest;
+    return max;
 };
-
-const createObstacleMap = (obstacles) => {
-    const map = {};
-    for (let obstacle of obstacles) {
-        const [x, y] = obstacle;
-        if (!map[x]) map[x] = {};
-        if (!map[x][y]) map[x][y] = 1;
-    }
-    return map;
-}
