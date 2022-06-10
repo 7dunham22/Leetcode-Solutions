@@ -26,12 +26,6 @@ const getLCA = (root, startValue, destValue) => {
     return left ? left : right;
 }
 
-const search = (root, value) => {
-    if (!root) return false; 
-    if (root.val === value) return true; 
-    return search(root.left, value) || search(root.right, value);
-}
-
 const getUpwardPath = (root, startValue) => {
     if (!root) return null;
     if (root.val === startValue) return "";
