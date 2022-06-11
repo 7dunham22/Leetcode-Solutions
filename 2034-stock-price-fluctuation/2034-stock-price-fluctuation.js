@@ -16,13 +16,9 @@ StockPrice.prototype.update = function(timestamp, price) {
     const i = this.times.indexOf(timestamp);
     if (i === -1) {
         this.prices.push(price);
-        // this.minPrice = Math.min(this.minPrice, price);
-        // this.maxPrice = Math.max(this.maxPrice, price);
         this.times.push(timestamp);
     } else {
         this.prices[i] = price;
-        // this.minPrice = Math.min(...this.prices);
-        // this.maxPrice = Math.max(...this.prices);
     }
     if (timestamp >= this.latest[0]) this.latest = [timestamp, price];
 };
