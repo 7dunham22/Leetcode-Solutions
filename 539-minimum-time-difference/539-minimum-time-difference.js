@@ -3,12 +3,15 @@
  * @return {number}
  */
 var findMinDifference = function(timePoints) {
-    const convertedTimes = timePoints.map(time => getMinutes(time));
-    convertedTimes.sort((a,b) => a-b);
-    let MIN = Number.POSITIVE_INFINITY;
-    convertedTimes.push(convertedTimes[0] + 1440);
-    const n = convertedTimes.length;
-    for (let i=1; i<n; i++) {
+    const timeset = new Set();
+    for (let time of timePoints) {
+        const minutes = getMinutes(time);
+        if (timeset.has(minutes)) return 0;
+        timeset.add(minutes);
+    }
+    const convertedTimes = [...timeset].sort((a,b) => a-b);
+    let MIN = 1440 - convertedTimes[convertedTimes.length-1] + convertedTimes[0];
+    for (let i=1; i<convertedTimes.length; i++) {
         const curr = convertedTimes[i];
         const compare = convertedTimes[i-1];
         MIN = Math.min(MIN, curr - compare);
@@ -18,8 +21,6 @@ var findMinDifference = function(timePoints) {
 
 const getMinutes = (time) => {
     const [hours, minutes] = time.split(":");
-    let ans = Number(minutes);
-    ans += Number(hours) * 60;
-    return ans;
+    return Number(hours) * 60 + Number(minutes);
 }
 
