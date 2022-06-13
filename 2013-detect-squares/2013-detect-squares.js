@@ -31,9 +31,11 @@ DetectSquares.prototype.count = function(point) {
     if (!(x1 in this.points)) return 0;
     for (let x2 in this.points) {
         for (let y2 in this.points[x2]) {
-            const count = this.points[x2][y2];
-            if (Math.abs(x1-x2) === 0 || Math.abs(x1-x2) !== Math.abs(y1 - y2) || !this.points[x1][y2] || !this.points[x2][y1]) continue;
-            res += count * this.points[x1][y2] * this.points[x2][y1]; 
+            const first = this.points[x2][y2];
+            const second = this.points[x1][y2];
+            const third = this.points[x2][y1];
+            if (Math.abs(x1-x2) === 0 || Math.abs(x1-x2) !== Math.abs(y1 - y2) || !second|| !third) continue;
+            res += first * second * third;
         }
     }
     return res;
