@@ -2,11 +2,10 @@
  * @param {number} length
  */
 var SnapshotArray = function(length) {
-    this.array = [];
-    for (let i=0; i<length; i++) {
-        this.array.push([[0,0]]);
-    }
-    this.snap_id = 0;
+    this.len = length;
+    this.snaps = {};
+    this.snapId = 0;
+    this.curr = [];
 };
 
 /** 
@@ -15,23 +14,18 @@ var SnapshotArray = function(length) {
  * @return {void}
  */
 SnapshotArray.prototype.set = function(index, val) {
-    const arrAtIndex = this.array[index];
-    const lastIndex = arrAtIndex.length-1;
-    const lastSnapId = arrAtIndex[lastIndex][0];
-    if (lastSnapId === this.snap_id) {
-        arrAtIndex[lastIndex][1] = val;
-    } else {
-        arrAtIndex.push([this.snap_id, val]);
-    }
-    
+    if (index > this.len) return undefined;
+    this.curr[index] = val;
 };
 
 /**
  * @return {number}
  */
 SnapshotArray.prototype.snap = function() {
-    this.snap_id++;
-    return this.snap_id - 1;
+    const id = this.snapId;
+    this.snaps[id] = this.curr.slice();
+    this.snapId++;
+    return id;
 };
 
 /** 
@@ -40,25 +34,7 @@ SnapshotArray.prototype.snap = function() {
  * @return {number}
  */
 SnapshotArray.prototype.get = function(index, snap_id) {
-    const nums = this.array[index];
-    if (nums[nums.length-1][0] < snap_id) return nums[nums.length-1][1];
-    
-    let i = 0;
-    let j = nums.length-1;
-    let mid;
-    while (i < j) {
-        mid = Math.floor((i+j)/2);
-        if (nums[mid][0] >= snap_id) {
-            j = mid;
-        } else {
-            i = mid + 1;
-        }
-    }
-    
-    if (nums[j][0] === snap_id || j === 0) {
-        return nums[j][1];
-    }
-    return nums[j-1][1];
+    return this.snaps[snap_id][index] || 0;
     
 };
 
