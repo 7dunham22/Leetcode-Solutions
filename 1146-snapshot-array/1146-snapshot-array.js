@@ -23,7 +23,8 @@ SnapshotArray.prototype.set = function(index, val) {
  */
 SnapshotArray.prototype.snap = function() {
     const id = this.snapId;
-    this.snaps[id] = this.curr.slice();
+    // this.snaps[id] = this.curr.slice();
+    this.snaps[id] = [...this.curr];
     this.snapId++;
     return id;
 };
