@@ -2,23 +2,21 @@
  * @param {number[]} w
  */
 var Solution = function(w) {
-    this.prefixSums = [];
-    let prefixSum = 0;
-    for (let weight of w) {
-        prefixSum += weight;
-        this.prefixSums.push(prefixSum);
+    this.weights = new Map();
+    this.sum = 0;
+    for (let i=0; i<w.length; i++) {
+        this.sum += w[i];
+        this.weights.set(this.sum, i);
     }
-    this.totalSum = prefixSum;
 };
 
 /**
  * @return {number}
  */
 Solution.prototype.pickIndex = function() {
-    const target = Math.random() * this.totalSum;
-    for (let i=0; i<this.prefixSums.length; i++) {
-        const prefixSum = this.prefixSums[i];
-        if (target < prefixSum) return i;
+    const index = Math.floor(Math.random() * this.sum);
+    for (let key of this.weights.keys()) {
+        if (index < key) return this.weights.get(key);
     }
 };
 
