@@ -25,7 +25,7 @@ var findAllRecipes = function(recipes, ingredients, supplies) {
 	        res.push(recipes[i]);
         } else {
 	        inDegree[recipes[i]] = unavailable;
-        }	
+        }
     }
     for (let i=0; i<res.length; i++) {
 	    const recipe = res[i];
