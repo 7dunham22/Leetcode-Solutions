@@ -6,6 +6,7 @@
 var shortestPath = function(grid, k) {
     const rEnd = grid.length-1;
     const cEnd = grid[0].length-1;
+    const deltas = [[0,1], [1,0], [0,-1], [-1,0]];
     const queue = [[0,0,k,0, prev=new Set()]]; //[r,c,k,steps]
     while (queue.length > 0) {
         const curr = queue.shift();
@@ -15,7 +16,6 @@ var shortestPath = function(grid, k) {
             return steps;
         } else if (!visited.has(key)){
             visited.add(key);
-            const deltas = [[0,1], [1,0], [0,-1], [-1,0]];
             for (let delta of deltas) {
                 const [dx, dy] = delta;
                 const rNext = r+dx;
