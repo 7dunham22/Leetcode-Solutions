@@ -3,16 +3,20 @@
  * @return {number[]}
  */
 var amountPainted = function(paint) {
-    const log = [];
-    let area = new Array(5*10**4).fill(1);
-    for (let i=0; i<paint.length; i++) {
-        let day = 0;
-        const [start, end] = paint[i];
-        for (let i=start; i<end; i++) {
-            day += area[i];
-            area[i] = 0;
+    const paintedMap = [];
+    const res = [];
+    for (let [start, end] of paint) {
+        let c = 0;
+        for (let p=start; p<end; p++) {
+            if (!paintedMap[p]) {
+                c++;
+                paintedMap[p] = end;
+            } else {
+                p = paintedMap[p] - 1;
+            }
         }
-        log.push(day);
+        res.push(c);
     }
-    return log;
+    return res;
+    
 };
