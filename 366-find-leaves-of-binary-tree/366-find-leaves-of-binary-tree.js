@@ -11,16 +11,18 @@
  * @return {number[][]}
  */
 var findLeaves = function(root) {
-    let res = new Array(100).fill(0).map(() => new Array(0));
-    
-    const dfs = (node) => {
-        if (!node) return 0;
-        const depth = Math.max(dfs(node.left), dfs(node.right));
-        res[depth].push(node.val);
-        return depth + 1;
+    const solution = [];
+    const getHeight = (root) => {
+        if (!root) return -1;
+        const leftHeight = getHeight(root.left);
+        const rightHeight = getHeight(root.right);
+        const currHeight = Math.max(leftHeight, rightHeight) + 1;
+        if (solution.length === currHeight) {
+            solution.push([]);
+        }
+        solution[currHeight].push(root.val);
+        return currHeight; 
     }
-    
-    dfs(root);
-    res = res.filter(x => x.length > 0);
-    return res;
+    getHeight(root);
+    return solution; 
 }
