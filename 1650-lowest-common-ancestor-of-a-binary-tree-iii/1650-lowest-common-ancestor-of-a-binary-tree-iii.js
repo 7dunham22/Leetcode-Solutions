@@ -13,28 +13,12 @@
  * @return {Node}
  */
 var lowestCommonAncestor = function(p, q) {
-    if (!p || !q) return null;
-    const pq = findPath(p, q);
-    if (pq) return pq[pq.length-1];
-    const qp = findPath(q, p);
-    if (qp) return qp[qp.length-1];
-    const pParent = findPath(p.parent, q);
-    return lowestCommonAncestor(p.parent, q);
+    let a = p;
+    let b = q;
+    while (a !== b) {
+        a = !a ? q : a.parent;
+        b = !b ? p : b.parent;
+    }
+    return a; 
 };
 
-
-const findPath = (root, target) => {
-    if (!root) return null;
-    if (root === target) return [root]; 
-    const leftPath = findPath(root.left, target);
-    if (leftPath) {
-        leftPath.push(root);
-        return leftPath;
-    }
-    const rightPath = findPath(root.right, target);
-    if (rightPath) {
-        rightPath.push(root);
-        return rightPath;
-    }
-    return null; 
-}
