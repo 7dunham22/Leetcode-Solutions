@@ -19,9 +19,14 @@ WordDistance.prototype.shortest = function(word1, word2) {
     const indices1 = this.dict[word1];
     const indices2 = this.dict[word2];
     let MIN = Number.POSITIVE_INFINITY;
-    for (let i1 of indices1) {
-        for (let i2 of indices2) {
-            MIN = Math.min(MIN, Math.abs(i1 - i2));
+    let l1 = 0;
+    let l2 = 0;
+    while (l1 < indices1.length && l2 < indices2.length) {
+        MIN = Math.min(MIN, Math.abs(indices1[l1] - indices2[l2]));
+        if (indices1[l1] < indices2[l2]) {
+            l1++;
+        } else {
+            l2++;
         }
     }
     return MIN;
