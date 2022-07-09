@@ -11,9 +11,8 @@
  */
 var mergeKLists = function(lists, pseudo = new ListNode()) {
     let tail = pseudo;
+    lists = lists.filter(x => x !== null);
     while (lists.length > 0) {
-        lists = lists.filter(x => x !== null);
-        if (lists.length === 0) continue;
         let MIN = Number.POSITIVE_INFINITY;
         let minIndex = null;
         for (let i=0; i<lists.length; i++) {
@@ -26,6 +25,7 @@ var mergeKLists = function(lists, pseudo = new ListNode()) {
         tail.next = lists[minIndex];
         lists[minIndex] = lists[minIndex].next;
         tail = tail.next;
+        lists = lists.filter(x => x !== null);
     }
     return pseudo.next;
 };
