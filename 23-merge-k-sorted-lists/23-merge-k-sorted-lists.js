@@ -9,23 +9,28 @@
  * @param {ListNode[]} lists
  * @return {ListNode}
  */
-var mergeKLists = function(lists, pseudo = new ListNode()) {
-    let tail = pseudo;
-    lists = lists.filter(x => x !== null);
-    while (lists.length > 0) {
-        let MIN = Number.POSITIVE_INFINITY;
-        let minIndex = null;
-        for (let i=0; i<lists.length; i++) {
-            const node = lists[i];
-            if (node.val < MIN) {
-                MIN = node.val;
-                minIndex = i;
-            }
+var mergeKLists = function(lists) {
+    const n = lists.length;
+    if (n === 0) return null;
+    
+    const mergeTwoLists = (l1, l2) => {
+        if (!l1) return l2;
+        if (!l2) return l1;
+        if (l1.val <= l2.val) {
+            l1.next = mergeTwoLists(l1.next, l2);
+            return l1;
+        } else {
+            l2.next = mergeTwoLists(l1, l2.next);
+            return l2;
         }
-        tail.next = lists[minIndex];
-        lists[minIndex] = lists[minIndex].next;
-        tail = tail.next;
-        lists = lists.filter(x => x !== null);
     }
-    return pseudo.next;
+    
+    const merge = (left, right) => {
+        if (left === right) return lists[left];
+        const mid = (left + right) >> 1;
+        const l1 = merge(left, mid);
+        const l2 = merge(mid+1, right);
+        return mergeTwoLists(l1,l2);
+    }
+    return merge(0, n-1);
 };
