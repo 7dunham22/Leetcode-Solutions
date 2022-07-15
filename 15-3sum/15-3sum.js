@@ -4,45 +4,37 @@
  */
 
 var threeSum = function(nums) {
+    const results = [];
     nums.sort((a,b) => a-b);
-    const res = [];
+    const visited = new Set();
     for (let i=0; i<nums.length; i++) {
-        if (nums[i] > 0) break;
-        if (i === 0 || nums[i] !== nums[i-1]) {
-            twoSum(nums, i, res);
+        const num = nums[i];
+        if (num > 0) return results;
+        const target = 0 - num;
+        const rest = twoSum(nums, target, i);
+        if (rest.length > 0) {
+            for (let res of rest) {
+                const [x,y,z] = [num, res[0], res[1]];
+                const key = x+','+y+','+z;
+                if (!visited.has(key)) {
+                    results.push([x,y,z]);   
+                    visited.add(key);
+                }
+            }
+            
         }
     }
-    return res;
+    return results;
 };
 
-const twoSum = (nums, i, res) => {
-    let lo = i+1;
-    let high = nums.length-1;
-    while (lo < high) {
-        const sum = nums[i] + nums[lo] + nums[high];
-        if (sum === 0) {
-            res.push([nums[i], nums[lo], nums[high]]);
-            lo++;
-            high--;
-            while (lo < high && nums[lo] === nums[lo-1]) {
-                lo++;
-            }
-        } else if (sum > 0) {
-            high--;
-        } else {
-            lo++;
-        }
+const twoSum = (nums, target, curr) => {
+    const res = [];
+    const memo = {};
+    for (let i=curr+1; i<nums.length; i++) {
+        const num = nums[i];
+        const subTarget = target - num;
+        if (subTarget in memo) res.push([subTarget, num]);
+        memo[num] = i;
     }
+    return res;
 }
-
-/*
-[-1,0,1,2,-1,-4,-2,-3,3,0,4]
-i:          0   0
-nums[i]:    -1  -1
-lo:         1   1
-nums[lo]    0   
-hi:         10  9
-nums[hi]:   4   0
-sum:        5
-
-*/
