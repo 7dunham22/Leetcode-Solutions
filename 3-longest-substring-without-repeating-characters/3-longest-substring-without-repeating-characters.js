@@ -3,15 +3,19 @@
  * @return {number}
  */
 var lengthOfLongestSubstring = function(s) {
-    const n = s.length;
-    let ans = 0;
-    const map = {};
-    for (let i=0, j=0; j<n; j++) {
-        if (s[j] in map) {
-            i = Math.max(map[s[j]], i);
+    let MAX = 0;
+    let found = new Set();
+    let left = 0;
+    let right = 0;
+    while (right < s.length) {
+        if (found.has(s[right])) {
+            found.delete(s[left]);
+            left++;
+        } else {
+            found.add(s[right]);
+            right++;
         }
-        ans = Math.max(ans, j - i + 1);
-        map[s[j]] = j+1;
+        MAX = Math.max(MAX, right - left);
     }
-    return ans; 
-};
+    return MAX;
+}
