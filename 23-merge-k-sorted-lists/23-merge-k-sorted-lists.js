@@ -10,27 +10,30 @@
  * @return {ListNode}
  */
 var mergeKLists = function(lists) {
-    const n = lists.length;
-    if (n === 0) return null;
-    
-    const mergeTwoLists = (l1, l2) => {
-        if (!l1) return l2;
-        if (!l2) return l1;
-        if (l1.val <= l2.val) {
-            l1.next = mergeTwoLists(l1.next, l2);
-            return l1;
-        } else {
-            l2.next = mergeTwoLists(l1, l2.next);
-            return l2;
-        }
+    if (lists.length === 0) return null;
+    while (lists.length > 1) {
+        let listA = lists.pop();
+        let listB = lists.pop();
+        lists.push(merge(listA, listB));
     }
-    
-    const merge = (left, right) => {
-        if (left === right) return lists[left];
-        const mid = (left + right) >> 1;
-        const l1 = merge(left, mid);
-        const l2 = merge(mid+1, right);
-        return mergeTwoLists(l1,l2);
-    }
-    return merge(0, n-1);
+    return lists[0];
 };
+
+const merge = (listA, listB) => {
+    if (!listA) return listB;
+    if (!listB) return listA;
+    const pseudo = new ListNode();
+    let curr = pseudo;
+    while (listA && listB) {
+        if (listA.val <= listB.val) {
+            curr.next = listA;
+            listA = listA.next;
+        } else {
+            curr.next = listB;
+            listB = listB.next; 
+        }
+        curr = curr.next;
+    }
+    curr.next = listA || listB;
+    return pseudo.next;
+}
