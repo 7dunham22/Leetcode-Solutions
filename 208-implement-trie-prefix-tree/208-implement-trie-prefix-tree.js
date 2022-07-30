@@ -9,28 +9,31 @@ var Trie = function() {
  */
 Trie.prototype.insert = function(word) {
     let curr = this.trie;
-    let seg = "";
     for (let i=0; i<word.length; i++) {
-        seg += word[i];
-        if (!(seg in curr)) curr[seg] = {};
-        curr = curr[seg];
+        let char = word[i];
+        if (!(char in curr)) curr[char] = {};
+        curr = curr[char];
     }
-    curr["final"] = true;
+    curr.final = true;
 };
+
+Trie.prototype.traverse = function(word) {
+    let curr = this.trie;
+    for (let i=0; i<word.length; i++) {
+        let char = word[i];
+        if (!(char in curr)) return null;
+        curr = curr[char];
+    }
+    return curr;
+}
 
 /** 
  * @param {string} word
  * @return {boolean}
  */
 Trie.prototype.search = function(word) {
-    let curr = this.trie;
-    let seg = "";
-    for (let i=0; i<word.length; i++) {
-        seg += word[i];
-        if (!(seg in curr)) return false;
-        curr = curr[seg];
-    }
-    return "final" in curr;
+    let node = this.traverse(word);
+    return node !== null && node.final === true;
 };
 
 /** 
@@ -38,14 +41,7 @@ Trie.prototype.search = function(word) {
  * @return {boolean}
  */
 Trie.prototype.startsWith = function(prefix) {
-    let curr = this.trie;
-    let seg = "";
-    for (let i=0; i<prefix.length; i++) {
-        seg += prefix[i];
-        if (!(seg in curr)) return false;
-        curr = curr[seg];
-    }
-    return true;
+    return this.traverse(prefix) !== null;
 };
 
 /** 
