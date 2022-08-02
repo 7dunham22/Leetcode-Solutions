@@ -3,28 +3,22 @@
  * @param {number} target
  * @return {number[][]}
  */
-var combinationSum = function(candidates, target, memo = {}, found = new Set()) {
-    if (target === 0) return [[]];
-    if (String(target) in memo) return memo[String(target)];
-    let results = [];
-    for (let num of candidates) {
-        if (target - num >= 0) {
-            const remainder = combinationSum(candidates, target - num, memo, found);
-            for (let combo of remainder) {
-                combo = [num, ...combo];
-                let i = 0;
-                while (i < combo.length-1 && combo[i] > combo[i+1]) {
-                    [combo[i], combo[i+1]] = [combo[i+1], combo[i]];
-                    i += 1;
-                }
-                const key = combo.join("");
-                if (!(found.has(key))) {
-                    found.add(key);
-                    results.push(combo);
-                }
-            }
+var combinationSum = function(candidates, target) {
+    const results = [];
+    
+    const backtrack = (remain, comb, start) => {
+        if (remain === 0) {
+            results.push([...comb]);
+            return;
+        } else if (remain < 0) return;
+        
+        for (let i=start; i<candidates.length; i++) {
+            comb.push(candidates[i]);
+            backtrack(remain - candidates[i], comb, i);
+            comb.pop();
         }
     }
-    memo[String(target)] = results;
+    
+    backtrack(target, [], 0);
     return results;
 };
