@@ -6,10 +6,11 @@
 var exist = function(board, word) {
     
     const deltas = [[1,0], [0,1], [-1,0], [0,-1]];
+    
     const backtrack = (board, r, c, i, visiting = new Set()) => {
         const key = r + ',' + c;
         if (i === word.length) return true; 
-        if (!board[r] || !board[r][c] || visiting.has(key)) return false; 
+        if (r < 0 || r >= board.length || c < 0 || c>=board[r].length || visiting.has(key)) return false; 
         const char = board[r][c];
         if (char !== word[i]) return false;
         visiting.add(key);
