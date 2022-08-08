@@ -3,16 +3,17 @@
  * @param {string[]} wordDict
  * @return {boolean}
  */
-var wordBreak = function(s, wordDict, memo = {}) {
-    if (s in memo) return memo[s];
-    if (s.length === 0) return true;
-    let dictSet = new Set(wordDict);
+var wordBreak = function(s, wordDict) {
+    const wordSet = new Set(wordDict);
+    const dp = new Array(s.length+1).fill(null).map(x => false);
+    dp[0] = true;
     for (let i=1; i<=s.length; i++) {
-        const seg = s.slice(0,i);
-        if (dictSet.has(seg)) {
-            if (wordBreak(s.slice(i), wordDict, memo)) return true;
+        for (let j=0; j<i; j++) {
+            if (dp[j] && wordSet.has(s.slice(j,i))) {
+                dp[i] = true;
+                break;
+            }
         }
     }
-    memo[s] = false;
-    return false;
+    return dp[s.length];
 };
