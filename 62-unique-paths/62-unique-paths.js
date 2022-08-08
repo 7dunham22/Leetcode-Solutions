@@ -4,11 +4,11 @@
  * @return {number}
  */
 var uniquePaths = function(m, n, i=0, j=0, memo={}) {
-    const key = i + ',' + j;
-    if (key in memo) return memo[key];
-    if (i === m-1 && j === n-1) return 1;
-    if (i < 0 || i >= m || j < 0 || j >= n) return 0;
-    const paths = uniquePaths(m,n,i+1,j,memo) + uniquePaths(m,n,i,j+1,memo);
-    memo[key] = paths;
-    return paths;
+    const d = new Array(m).fill(null).map(x => new Array(n).fill(null).map(x => 1));
+    for (let c=1; c<m; c++) {
+        for (let r=1; r<n; r++) {
+            d[c][r] = d[c-1][r] + d[c][r-1];
+        }
+    }
+    return d[m-1][n-1];
 };
