@@ -16,3 +16,14 @@ var maxProduct = function(nums) {
     }
     return result;
 };
+
+/* 
+[2,3,-2,4]
+
+i:      0   1   2   3
+num:    2   3   -2  4
+max:    2   6   -2  4
+min:    2   6   -12 -48
+result: 2   6   6   6
+
+*/
