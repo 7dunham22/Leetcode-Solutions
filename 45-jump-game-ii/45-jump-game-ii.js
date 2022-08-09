@@ -15,3 +15,13 @@ var jump = function(nums) {
     }
     return jumps;
 };
+
+/*
+[2,3,1,1,4]
+
+i:              0   1   2   3         
+nums[i]         2   3   1   1   
+jumps:      0   1   1   2   2
+currEnd:    0   2   2   4   4
+farthest:   0   2   4   4   4   
+*/
