@@ -17,3 +17,12 @@ var eraseOverlapIntervals = function(intervals) {
     }
     return res;
 };
+
+/*
+[[1,2], [1,3], [2,3], [3,4]]
+
+res:        0   1   1   1
+prevEnd:    2   2   3   4
+x:          1   2   3
+y:          3   3   4
+*/
