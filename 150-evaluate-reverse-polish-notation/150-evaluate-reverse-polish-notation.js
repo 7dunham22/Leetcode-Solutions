@@ -3,24 +3,58 @@
  * @return {number}
  */
 var evalRPN = function(tokens) {
-    let res = 0;
+    
+    const add = (...args) => {
+        let res = 0;
+        for (let arg of args) {
+            res += arg;
+        }
+        return res;
+    }
+
+    const subtract = (...args) => {
+        let res = args[0];
+        for (let arg of args.slice(1)) {
+            res -= arg;
+        }
+        return res;
+    }
+
+    const multiply = (...args) => {
+        let res = 1;
+        for (let arg of args) {
+            res *= arg;
+        }
+        return res;
+    }
+
+    const divide = (...args) => {
+        let res = args[0];
+        for (let arg of args.slice(1)) {
+            res = res/arg;
+        }
+        return res < 0 ? Math.ceil(res) : Math.floor(res);
+    }
+    
+    const operations = {
+        '+': add,
+        '-': subtract,
+        '*': multiply,
+        '/': divide
+    };
+    
     const stack = [];
     for (let token of tokens) {
-	    if (isNaN(token)){
-		    let next = 0;
-            const second = stack.pop();
-            const first = stack.pop();
-            if (token === '+') next = first + second;
-            else if (token === '-') next = first - second;
-            else if (token === '/') {
-                next = first/second;
-                next = next < 0 ? Math.ceil(next) : Math.floor(next);
-            }
-            else if (token === '*') next = first * second;
-            stack.push(next);
+        if (token in operations) {
+            const operate = operations[token];
+            const b = stack.pop();
+            const a = stack.pop();
+            stack.push(operate(a,b));
         } else {
-	        stack.push(Number(token));
+            stack.push(Number(token));
         }
     }
     return stack[0];
+    
 };
+
