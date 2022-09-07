@@ -4,35 +4,20 @@
  */
 var evalRPN = function(tokens) {
     
-    const add = (...args) => {
-        let res = 0;
-        for (let arg of args) {
-            res += arg;
-        }
-        return res;
+    const add = (a,b) => {
+        return a+b;
     }
 
-    const subtract = (...args) => {
-        let res = args[0];
-        for (let arg of args.slice(1)) {
-            res -= arg;
-        }
-        return res;
+    const subtract = (a,b) => {
+        return a-b;
     }
 
-    const multiply = (...args) => {
-        let res = 1;
-        for (let arg of args) {
-            res *= arg;
-        }
-        return res;
+    const multiply = (a,b) => {
+        return a*b;
     }
 
-    const divide = (...args) => {
-        let res = args[0];
-        for (let arg of args.slice(1)) {
-            res = res/arg;
-        }
+    const divide = (a,b) => {
+        let res = a/b;
         return res < 0 ? Math.ceil(res) : Math.floor(res);
     }
     
