@@ -22,7 +22,6 @@ var searchMatrix = function(matrix, target) {
         return false;
     }
     
-    
     let i = 0;
     const m = matrix[0].length;
     const n = matrix.length;
