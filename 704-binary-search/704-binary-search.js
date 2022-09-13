@@ -8,9 +8,10 @@ var search = function(nums, target) {
     let end = nums.length-1;
     while (start <= end) {
         const mid = Math.floor((start + end) / 2);
-        if (nums[mid] === target) {
+        const val = nums[mid];
+        if (val === target) {
             return mid;
-        } else if (nums[mid] < target) {
+        } else if (val < target) {
             start = mid + 1;
         } else {
             end = mid - 1;
