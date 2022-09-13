@@ -22,13 +22,21 @@ var searchMatrix = function(matrix, target) {
         return false;
     }
     
-    let i = 0;
-    const m = matrix[0].length;
     const n = matrix.length;
-    while (i < n && matrix[i][m-1] < target) {
-        i++;
-    }
+    const m = matrix[0].length;
     
-    const array = matrix[i];
-    return hasValue(array);
+    let start = 0;
+    let end = n-1;
+    while (start <= end) {
+        const mid = Math.floor((start + end) / 2);
+        const array = matrix[mid];
+        if (target < array[0]) {
+            end = mid - 1;
+        } else if (target > array[m-1]) {
+            start = mid + 1;
+        } else {
+            return hasValue(array);
+        }
+    }
+    return false;
 };
