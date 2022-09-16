@@ -1,12 +1,6 @@
 
 var TimeMap = function() {
     this.map = {};
-    /* {
-        "foo": {
-            "values": ['bar', 'bar2'],
-            "timestamps": [1, 4]
-        }
-    }*/
 };
 
 /** 
@@ -17,22 +11,11 @@ var TimeMap = function() {
  */
 TimeMap.prototype.set = function(key, value, timestamp) {
     if (!(key in this.map)) {
-        this.map[key] = {"values": [value], "timestamps": [timestamp]};
+        this.map[key] = {[timestamp]: value};
     } else {
-        const values = this.map[key].values;
-        const timestamps = this.map[key].timestamps;
-        values.push(value);
-        timestamps.push(timestamp);
-        let i = timestamps.length - 1;
-        while (i > 0 && timestamps[i] < timestamps[i-1]) {
-            [values[i], values[i-1]] = [values[i-1], values[i]];
-            [timestamps[i], timestamps[i-1]] = [timestamps[i-1], timestamps[i]];
-            i--;
-        }
-        this.map[key].values = values;
-        this.map[key].timestamps = timestamps;
+        this.map[key][timestamp] = value;
     }
-};
+}
 
 /** 
  * @param {string} key 
@@ -41,23 +24,13 @@ TimeMap.prototype.set = function(key, value, timestamp) {
  */
 TimeMap.prototype.get = function(key, timestamp) {
     if (!(key in this.map)) return "";
-    const values = this.map[key].values;
-    const timestamps = this.map[key].timestamps;
-    let l = 0;
-    let r = timestamps.length-1;
-    let prev = -1;
-    while (l <= r) {
-        const mid = Math.floor((l + r) / 2);
-        if (timestamps[mid] === timestamp) {
-            return values[mid];
-        } else if (timestamps[mid] < timestamp) {
-            prev = mid;
-            l = mid + 1;
-        } else {
-            r = mid - 1;
-        }
+    const entry = this.map[key];
+    if (timestamp in entry) return entry[timestamp];
+    let i = timestamp;
+    while (i > 0 && !(i in entry)) {
+        i--;
     }
-    return prev === -1 ? "" : values[prev];
+    return i > 0 ? entry[i] : "";
 };
 
 /** 
