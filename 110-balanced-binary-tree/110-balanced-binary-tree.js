@@ -11,19 +11,12 @@
  * @return {boolean}
  */
 var isBalanced = function(root) {
-    const heights = new Map();
-    if (!root) return true;
-    
-    const getHeight = (node) => {
-        if (!node) return 0;
-        if (heights.has(node)) return heights.get(node);
-        const height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
-        heights.set(node, height);
-        return height;
+    const dfs = (node) => {
+        if (!node) return [0, true];
+        const left = dfs(node.left);
+        const right = dfs(node.right);
+        const balanced = left[1] && right[1] && Math.abs(left[0] - right[0]) <= 1;
+        return [1 + Math.max(left[0], right[0]), balanced];
     }
-    
-    const leftHeight = getHeight(root.left);
-    const rightHeight = getHeight(root.right);
-    if (Math.abs(leftHeight - rightHeight) > 1) return false;
-    return isBalanced(root.left) && isBalanced(root.right);
+    return dfs(root)[1];
 };
