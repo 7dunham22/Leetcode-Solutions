@@ -2,15 +2,17 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
-var permute = function(nums) {
-    if (nums.length === 0) return [[]];
-    const first = nums[0];
-    const perms = permute(nums.slice(1));
-    const res = [];
-    for (const perm of perms) {
-        for (let i=0; i<=perm.length; i++) {
-            res.push([...perm.slice(0,i), first, ...perm.slice(i)]);
-        }
+var permute = function(nums, res = [], n = 0) {
+    if (n === nums.length) {
+        res.push(nums.slice(0));
+        return res;
     }
+    
+    for (let i=n; i<nums.length; i++) {
+        [nums[i], nums[n]] = [nums[n], nums[i]];
+        permute(nums, res, n + 1);
+        [nums[i], nums[n]] = [nums[n], nums[i]];
+    }
+    
     return res;
 };
