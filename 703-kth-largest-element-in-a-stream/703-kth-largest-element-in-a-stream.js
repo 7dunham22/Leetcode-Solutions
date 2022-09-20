@@ -3,34 +3,28 @@
  * @param {number[]} nums
  */
 
-function Node(val) {
-    this.val = val;
-    this.left = null;
-    this.right = null;
-}
-
-function insert(val, root) {
-    if (val <= root.val) {
-        if (root.left) {
-            root.left = insert(val, root.left);
+function binSearch(array, val, comparator = (a,b) => b-a) {
+    let lo = 0;
+    let hi = array.length - 1;
+    while (lo <= hi) {
+        const mid = Math.floor((lo + hi) / 2);
+        const comp = comparator(array[mid], val);
+        if (comp < 0) {
+            lo = mid + 1;
+        } else if (comp > 0) {
+            hi = mid - 1;
         } else {
-            root.left = new Node(val);
-        }
-    } else {
-        if (root.right) {
-            root.right = insert(val, root.right);
-        } else {
-            root.right = new Node(val);
+            return mid;
         }
     }
-    return root;
+    return lo;
 }
 
 var KthLargest = function(k, nums) {
     this.k = k;
-    this.root = new Node(nums[0]);
-    for (let i=1; i<nums.length; i++) {
-        this.root = insert(nums[i], this.root);
+    this.nums = [];
+    for (const num of nums) {
+        this.add(num);
     }
 };
 
@@ -39,22 +33,12 @@ var KthLargest = function(k, nums) {
  * @return {number}
  */
 KthLargest.prototype.add = function(val) {
-    this.root = insert(val, this.root);
-    let i = 0;
-    let res;
-    
-    const inOrder = (node) => {
-        if (!node || i >= this.k) return;
-        inOrder(node.right);
-        if (i < this.k) {
-            i += 1;
-            res = node.val;
-        }
-        inOrder(node.left);
+    const index = binSearch(this.nums, val);
+    this.nums.splice(index, 0, val);
+    if (this.nums.length > this.k) {
+        this.nums.pop();
     }
-    
-    inOrder(this.root);
-    return res;
+    return this.nums[this.k - 1];
 };
 
 /** 
