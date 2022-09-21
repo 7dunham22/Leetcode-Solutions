@@ -7,7 +7,7 @@ var letterCombinations = function(digits) {
     const res = [];
 
     const backtrack = (d, curr = "") => {
-        if (d === digits.length) {
+        if (curr.length === digits.length) {
             if (curr.length) res.push(curr);
             return;
         }
