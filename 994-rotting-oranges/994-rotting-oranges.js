@@ -6,6 +6,7 @@ var orangesRotting = function(grid) {
     const n = grid.length;
     const m = grid[0].length;
     let rotten = []; // Queue of the oranges already rotted. [r, c]
+    let freshCount = 0;
     let mins = 0;
     
     const makeRot = () => {
@@ -16,18 +17,10 @@ var orangesRotting = function(grid) {
             for (const [r1,c1] of neighbors) {
                 if (r1<0 || r1===n || c1<0 || c1===m || grid[r1][c1] !== 1) continue;
                 grid[r1][c1] = 2;
+                freshCount -= 1;
                 rotten.push([r1,c1,min+1]);
             }
         }
-    }
-    
-    const hasFresh = () => {
-        for (let r=0; r<n; r++) {
-            for (let c=0; c<m; c++) {
-                if (grid[r][c] === 1) return true;
-            }
-        }
-        return false;
     }
     
     //Gather initial rotten oranges
@@ -35,11 +28,13 @@ var orangesRotting = function(grid) {
         for (let c=0; c<m; c++) {
             if (grid[r][c] === 2) {
                 rotten.push([r,c,0]);
+            } else if (grid[r][c] === 1) {
+                freshCount += 1;
             }
         }
     }
     
     makeRot();
     
-    return hasFresh() ? -1 : mins;
+    return freshCount > 0 ? -1 : mins;
 };
