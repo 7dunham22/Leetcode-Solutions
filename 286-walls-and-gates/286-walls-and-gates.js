@@ -11,13 +11,11 @@ var wallsAndGates = function(rooms) {
     const queue = [];
     
     const setDistances = () => {
-        const visiting = new Set();
         while (queue.length > 0) {
             const [r,c] = queue.shift();
-            visiting.add(r+','+c);
             const neighbors = [[r-1,c], [r+1,c], [r,c-1], [r,c+1]];
             for (const [r2,c2] of neighbors) {
-                if (r2<0 || r2===n || c2<0 || c2===m || visiting.has(r2+','+c2) || rooms[r2][c2] !== EMPTY) continue;
+                if (r2<0 || r2===n || c2<0 || c2===m || rooms[r2][c2] !== EMPTY) continue;
                 rooms[r2][c2] = rooms[r][c] + 1;
                 queue.push([r2,c2]);
             }
