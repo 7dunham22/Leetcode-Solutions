@@ -6,19 +6,19 @@ var canPartition = function(nums) {
     const sum = nums.reduce((prev,curr) => prev + curr);
     if (sum%2) return false;
     
-    let dp = new Set();
-    dp.add(0);
     const target = Math.floor(sum / 2);
     
-    for (let i=nums.length-1; i>=0; i--) {
-        const nextDp = new Set();
-        for (const t of Array.from(dp)) {
-            if (t + nums[i] === target) return true;
-            nextDp.add(t + nums[i]);
-            nextDp.add(t);
-        }
-        dp = nextDp;
+    const memo = {};
+    
+    const dfs = (i=0, prev=0) => {
+        if (prev === target) return true;
+        if (i===nums.length || prev > target) return false;
+        const key = i + ',' + prev;
+        if (key in memo) return memo[key];
+        const result = dfs(i+1, prev) || dfs(i+1, prev + nums[i]);
+        memo[key] = result;
+        return result;
     }
     
-    return false;
+    return dfs();
 };
