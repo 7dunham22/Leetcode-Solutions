@@ -3,23 +3,19 @@
  * @return {number}
  */
 var minMeetingRooms = function(intervals) {
-    const starts = intervals.sort((a,b) => a[0]-b[0]);
+    const starts = intervals.map(x => x[0]).sort((a,b) => a-b);
+    const ends = intervals.map(x => x[1]).sort((a,b) => a-b);
     
-    let MIN = 0;
-    const rooms = [];
+    let minRooms = 0;
+    let j = 0;
     
-    for (const [start, end] of starts) {
-        while (rooms.length > 0 && start >= rooms[rooms.length-1]) {
-            rooms.pop();
+    for (let i=0; i<starts.length; i++) {
+        if (starts[i] < ends[j]) {
+            minRooms += 1;
+        } else {
+            j += 1;
         }
-        rooms.push(end);
-        let i = rooms.length-1;
-        while (i > 0 && rooms[i-1] < rooms[i]) {
-            [rooms[i], rooms[i-1]] = [rooms[i-1], rooms[i]];
-            i--;
-        }
-        MIN = Math.max(MIN, rooms.length);
-    } 
+    }
     
-    return MIN;
+    return minRooms;
 };
