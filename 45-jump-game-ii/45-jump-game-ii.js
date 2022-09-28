@@ -3,25 +3,21 @@
  * @return {number}
  */
 var jump = function(nums) {
-    let jumps = 0;
-    let currEnd = 0;
-    let farthest = 0;
-    for (let i=0; i<nums.length-1; i++) {
-        farthest = Math.max(farthest, i + nums[i]);
-        if (i === currEnd) {
-            jumps += 1;
-            currEnd = farthest;
+    const memo = {};
+    
+    const dfs = (i) => {
+        if (i === nums.length-1) return 0;
+        if (i >= nums.length) return Number.POSITIVE_INFINITY;
+        if (i in memo) return memo[i];
+        let MIN = Number.POSITIVE_INFINITY;
+        for (let j=1; j<=nums[i]; j++) {
+            MIN = Math.min(MIN, 1 + dfs(i + j));
         }
+        memo[i] = MIN;
+        return MIN;
     }
-    return jumps;
+    
+    const res = dfs(0);
+    return res;
 };
 
-/*
-[2,3,1,1,4]
-
-i:              0   1   2   3         
-nums[i]         2   3   1   1   
-jumps:      0   1   1   2   2
-currEnd:    0   2   2   4   4
-farthest:   0   2   4   4   4   
-*/
