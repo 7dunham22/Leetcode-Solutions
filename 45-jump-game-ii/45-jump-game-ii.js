@@ -3,21 +3,18 @@
  * @return {number}
  */
 var jump = function(nums) {
-    const memo = {};
-    
-    const dfs = (i) => {
-        if (i === nums.length-1) return 0;
-        if (i >= nums.length) return Number.POSITIVE_INFINITY;
-        if (i in memo) return memo[i];
-        let MIN = Number.POSITIVE_INFINITY;
-        for (let j=1; j<=nums[i]; j++) {
-            MIN = Math.min(MIN, 1 + dfs(i + j));
+    let l = 0;
+    let r = 0;
+    let res = 0;
+    while (r < nums.length-1) {
+        let maxJump = 0;
+        for (let i=0; i<=r; i++) {
+            maxJump = Math.max(maxJump, i + nums[i]);
         }
-        memo[i] = MIN;
-        return MIN;
+        l = r+1;
+        r = maxJump;
+        res += 1;
     }
-    
-    const res = dfs(0);
     return res;
 };
 
