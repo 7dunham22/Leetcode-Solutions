@@ -4,7 +4,6 @@
  */
 var longestIncreasingPath = function(matrix) {
     const memo = {};
-    let MAX = 0;
     
     const dfs = (r,c, prev = null) => {
         const pos = r+','+c;
@@ -24,9 +23,8 @@ var longestIncreasingPath = function(matrix) {
     for (let r=0; r<matrix.length; r++) {
         for (let c=0; c<matrix[0].length; c++) {
             const path = dfs(r,c);
-            MAX = Math.max(MAX, path);
         }
     }
     
-    return MAX;
+    return Math.max(...Object.values(memo));
 };
