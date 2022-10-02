@@ -26,6 +26,9 @@ function remove(head, key) {
     if (head.key === key) {
         return head.next;
     }
+    if (key < head.key) {
+        return head;
+    }
     head.next = remove(head.next, key);
     return head;
 }
