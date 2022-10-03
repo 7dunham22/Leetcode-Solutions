@@ -4,9 +4,8 @@
  */
 var SQL = function(names, columns) {
     this.sql = {};
-    for (let i=0; i<names.length; i++) {
-        const name = names[i];
-        this.sql[name] = [new Array(columns[i]).fill(null).map(x => null)];
+    for (const name of names) {
+        this.sql[name] = {rows: {}, id: 1};
     }
 };
 
@@ -17,8 +16,8 @@ var SQL = function(names, columns) {
  */
 SQL.prototype.insertRow = function(name, row) {
     const table = this.sql[name];
-    const newId = table.length;
-    table[newId] = row;
+    table.rows[table.id] = row;
+    table.id += 1;
     this.sql[name] = table;
 };
 
@@ -29,7 +28,7 @@ SQL.prototype.insertRow = function(name, row) {
  */
 SQL.prototype.deleteRow = function(name, rowId) {
     const table = this.sql[name];
-    table[rowId] = new Array(table[0].length).fill(null).map(x => null);
+    table.rows[rowId] = null;
     this.sql[name] = table;
 };
 
@@ -40,8 +39,7 @@ SQL.prototype.deleteRow = function(name, rowId) {
  * @return {string}
  */
 SQL.prototype.selectCell = function(name, rowId, columnId) {
-    const table = this.sql[name];
-    return table[rowId][columnId-1];
+    return this.sql[name].rows[rowId][columnId-1];
 };
 
 /** 
