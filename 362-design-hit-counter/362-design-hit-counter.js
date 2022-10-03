@@ -8,7 +8,11 @@ var HitCounter = function() {
  * @return {void}
  */
 HitCounter.prototype.hit = function(timestamp) {
+    const threshold = timestamp > 300 ? timestamp - 300 : 0;
     this.hits.push(timestamp);
+    while (this.hits[0] <= threshold) {
+        this.hits.shift();
+    }
 };
 
 /** 
@@ -16,10 +20,11 @@ HitCounter.prototype.hit = function(timestamp) {
  * @return {number}
  */
 HitCounter.prototype.getHits = function(timestamp) {
-    const threshold = timestamp >= 300 ? timestamp - 300 : 0;
-    let i = 0;
-    while (this.hits[i] <= threshold) i++;
-    return this.hits.length - i;
+    const threshold = timestamp > 300 ? timestamp - 300 : 0;
+    while (this.hits[0] <= threshold) {
+        this.hits.shift();
+    }
+    return this.hits.length;
 };
 
 /** 
