@@ -39,26 +39,23 @@ var mostVisitedPattern = function(username, timestamp, website) {
     
     let MAX = 0;
     let result = [];
-    const trie = {'#': {}};
+    
+    const patternScores = {};
     for (const user in userHistory) {
         const patterns = getPatterns(userHistory[user]).filter(p => p.length === 3);
         for (const pattern of patterns) {
-            let level = trie['#'];
-            for (let i=0; i<pattern.length; i++) {
-                const site = pattern[i];
-                if (!(site in level)) level[site] = {};
-                level = level[site];
-            }
-            if (!('#' in level)) level['#'] = new Set();
-            const score = level['#'];
-            if (!score.has(user)) score.add(user);
-            if (score.size > MAX) {
-                MAX = score.size;
+            const key = pattern.join('|');
+            if (!(key in patternScores)) patternScores[key] = new Set();
+            patternScores[key].add(user);
+            const freq = patternScores[key].size;
+            if (freq > MAX) {
+                MAX = freq;
                 result = pattern;
-            } else if (score.size === MAX) {
+            } else if (freq === MAX) {
                 result = getSmaller(result, pattern);
             }
         }
     }
+
     return result;
 };
