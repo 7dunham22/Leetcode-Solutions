@@ -11,7 +11,6 @@ var UndergroundSystem = function() {
  * @return {void}
  */
 UndergroundSystem.prototype.checkIn = function(id, stationName, t) {
-    if (!(id in this.customers)) this.customers[id] = {};
     this.customers[id] = {'entryStation': stationName, 'entryTime': t};
 };
 
