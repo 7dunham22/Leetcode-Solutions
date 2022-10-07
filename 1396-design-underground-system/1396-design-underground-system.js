@@ -22,9 +22,10 @@ UndergroundSystem.prototype.checkIn = function(id, stationName, t) {
  */
 UndergroundSystem.prototype.checkOut = function(id, exitStation, t) {
     const {entryStation, entryTime} = this.customers[id];
-    if (!(entryStation in this.travelTimes)) this.travelTimes[entryStation] = {};
-    if (!(exitStation in this.travelTimes[entryStation])) this.travelTimes[entryStation][exitStation] = [];
-    this.travelTimes[entryStation][exitStation].push(t - entryTime);
+    const key = entryStation + ':' + exitStation;
+    if (!(key in this.travelTimes)) this.travelTimes[key] = [0,0];
+    const [totalDistance, trips] = this.travelTimes[key];
+    this.travelTimes[key] = [totalDistance + (t - entryTime), trips + 1];
 };
 
 /** 
@@ -33,8 +34,8 @@ UndergroundSystem.prototype.checkOut = function(id, exitStation, t) {
  * @return {number}
  */
 UndergroundSystem.prototype.getAverageTime = function(startStation, endStation) {
-    const travelTimes = this.travelTimes[startStation][endStation];
-    return travelTimes.reduce((prev,curr) => prev+curr) / travelTimes.length;
+    const [totalDistance, trips] = this.travelTimes[startStation+':'+endStation];
+    return totalDistance / trips;
 };
 
 /** 
