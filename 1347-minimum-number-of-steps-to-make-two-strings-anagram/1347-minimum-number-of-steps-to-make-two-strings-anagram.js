@@ -18,10 +18,9 @@ var minSteps = function(s, t) {
     }
     
     let diff = 0;
-    for (const char in sCounts) {
-        diff += Math.abs(sCounts[char] - tCounts[char]);
+    for (const char in tCounts) {
+        if (tCounts[char] < sCounts[char]) diff += sCounts[char] - tCounts[char];
     }
     
-    return diff / 2;
-    
+    return diff;
 };
