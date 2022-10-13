@@ -1,16 +1,9 @@
 /**
  * @param {string} homepage
  */
-
-function Node(url) {
-    this.url = url;
-    this.prev = null;
-    this.next = null;
-}
-
 var BrowserHistory = function(homepage) {
-    this.history = new Node(homepage);
-    this.curr = this.history;
+    this.history = [homepage];
+    this.vorwarts = [];
 };
 
 /** 
@@ -18,10 +11,8 @@ var BrowserHistory = function(homepage) {
  * @return {void}
  */
 BrowserHistory.prototype.visit = function(url) {
-    const newSite = new Node(url);
-    newSite.prev = this.curr;
-    this.curr.next = newSite;
-    this.curr = this.curr.next;
+    this.history.push(url);
+    this.vorwarts = [];
 };
 
 /** 
@@ -29,11 +20,11 @@ BrowserHistory.prototype.visit = function(url) {
  * @return {string}
  */
 BrowserHistory.prototype.back = function(steps) {
-    while (steps > 0 && this.curr.prev !== null) {
-        this.curr = this.curr.prev;
+    while (steps > 0 && this.history.length > 1) {
+        this.vorwarts.push(this.history.pop());
         steps -= 1;
     }
-    return this.curr.url;
+    return this.history[this.history.length-1];
 };
 
 /** 
@@ -41,11 +32,11 @@ BrowserHistory.prototype.back = function(steps) {
  * @return {string}
  */
 BrowserHistory.prototype.forward = function(steps) {
-    while (steps > 0 && this.curr.next !== null) {
-        this.curr = this.curr.next;
+    while (steps > 0 && this.vorwarts.length > 0) {
+        this.history.push(this.vorwarts.pop());
         steps -= 1;
     }
-    return this.curr.url;
+    return this.history[this.history.length-1];
 };
 
 /** 
