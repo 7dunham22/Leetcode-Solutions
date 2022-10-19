@@ -2,7 +2,7 @@
  * @param {number} n
  */
 var OrderedStream = function(n) {
-    this.vals = new Array(n).fill(null).map(x => "");
+    this.nums = new Array(n).fill(null);
     this.ptr = 0;
 };
 
@@ -12,13 +12,13 @@ var OrderedStream = function(n) {
  * @return {string[]}
  */
 OrderedStream.prototype.insert = function(idKey, value) {
-    this.vals[idKey-1] = value;
-    const chunk = [];
-    while (this.ptr < this.vals.length && this.vals[this.ptr] !== "") {
-        chunk.push(this.vals[this.ptr]);
-        this.ptr++;
+    const res = [];
+    this.nums[idKey - 1] = value;
+    while (this.ptr < this.nums.length && typeof this.nums[this.ptr] === 'string') {
+        res.push(this.nums[this.ptr]);
+        this.ptr += 1;
     }
-    return chunk;
+    return res;
 };
 
 /** 
