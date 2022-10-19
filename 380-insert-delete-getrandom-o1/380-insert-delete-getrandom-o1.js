@@ -1,7 +1,7 @@
 
 var RandomizedSet = function() {
-    this.vals = []; // [...vals]
-    this.hash = {}; // {val: index}
+    this.rec = {}; // {val: index}
+    this.nums = [];
 };
 
 /** 
@@ -9,10 +9,12 @@ var RandomizedSet = function() {
  * @return {boolean}
  */
 RandomizedSet.prototype.insert = function(val) {
-    if (val in this.hash) return false;
-    this.vals.push(val);
-    this.hash[val] = this.vals.length-1;
-    return true;
+    if (!(val in this.rec)) {
+        this.nums.push(val);
+        this.rec[val] = this.nums.length-1;
+        return true;
+    }
+    return false;
 };
 
 /** 
@@ -20,22 +22,23 @@ RandomizedSet.prototype.insert = function(val) {
  * @return {boolean}
  */
 RandomizedSet.prototype.remove = function(val) {
-    if (!(val in this.hash)) return false;
-    const i = this.hash[val];
-    const toDelete = this.vals[i];
-    const last = this.vals[this.vals.length-1];
-    [this.vals[i], this.vals[this.vals.length-1]] = [last, toDelete];
-    this.hash[last] = i;
-    this.vals.pop();
-    delete this.hash[val];
-    return true;
+    if (val in this.rec) {
+        const index = this.rec[val];
+        const toSwitch = this.nums[this.nums.length-1];
+        [this.nums[index], this.nums[this.nums.length-1]] = [this.nums[this.nums.length-1], this.nums[index]];
+        this.rec[toSwitch] = index;
+        this.nums.pop();
+        delete this.rec[val];
+        return true;
+    }
+    return false;
 };
 
 /**
  * @return {number}
  */
 RandomizedSet.prototype.getRandom = function() {
-    return this.vals[Math.floor(Math.random() * this.vals.length)];
+    return this.nums[Math.floor(Math.random() * this.nums.length)];
 };
 
 /** 
