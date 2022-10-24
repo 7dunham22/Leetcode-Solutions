@@ -3,6 +3,7 @@
  * @return {string[]}
  */
 var invalidTransactions = function(transactions) {
+    const res = [];
     const names = [];
     const times = [];
     const amounts = [];
@@ -10,24 +11,23 @@ var invalidTransactions = function(transactions) {
     for (const transaction of transactions) {
         const [name, time, amount, city] = transaction.split(',');
         names.push(name);
-        times.push(+time);
-        amounts.push(+amount);
+        times.push(Number(time));
+        amounts.push(Number(amount));
         cities.push(city);
     }
     
-    const res = [];
-    for (let i=0; i<transactions.length; i++) {
-        const [name, time, amount, city] = [names[i], times[i], amounts[i], cities[i]];
-        if (amount > 1000) {
-            res.push(name+','+time+','+amount+','+city);   
-        } else {
-            for (let j=0; j<transactions.length; j++) {
-                if (i !== j && Math.abs(time - times[j]) <= 60 && names[j] === name && cities[j] !== city) {
-                    res.push(name+','+time+','+amount+','+city);
-                    break;
-                }
+    for (let i=0; i<names.length; i++) {
+        if (amounts[i] > 1000) {
+            res.push([names[i], times[i], amounts[i], cities[i]].join(','));
+            continue;
+        }
+        for (let j=0; j<names.length; j++) {
+            if (i !== j && names[i] === names[j] && Math.abs(times[j] - times[i]) <= 60 && cities[i] !== cities[j]) {
+                res.push([names[i], times[i], amounts[i], cities[i]].join(','));
+                break;
             }
         }
     }
+    
     return res;
 };
