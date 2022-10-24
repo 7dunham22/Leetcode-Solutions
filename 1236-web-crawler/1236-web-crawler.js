@@ -23,7 +23,7 @@ var crawl = function(startUrl, htmlParser) {
     const queue = htmlParser.getUrls(startUrl);
     while (queue.length > 0) {
         const curr = queue.shift();
-        if (!res.has(curr) && curr.split('/')[2] === domain) {
+        if (!res.has(curr) && curr.indexOf(domain) !== -1) {
             res.add(curr);
             const urls = htmlParser.getUrls(curr);
             for (const url of urls) {
