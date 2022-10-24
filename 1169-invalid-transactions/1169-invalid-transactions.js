@@ -3,7 +3,7 @@
  * @return {string[]}
  */
 var invalidTransactions = function(transactions) {
-    const res = [];
+    let res = new Array(transactions.length).fill(null);
     const names = [];
     const times = [];
     const amounts = [];
@@ -17,17 +17,21 @@ var invalidTransactions = function(transactions) {
     }
     
     for (let i=0; i<names.length; i++) {
+        if (res[i] !== null) continue;
         if (amounts[i] > 1000) {
-            res.push([names[i], times[i], amounts[i], cities[i]].join(','));
+            res[i] = [names[i], times[i], amounts[i], cities[i]].join(',');
             continue;
         }
         for (let j=0; j<names.length; j++) {
             if (i !== j && names[i] === names[j] && Math.abs(times[j] - times[i]) <= 60 && cities[i] !== cities[j]) {
-                res.push([names[i], times[i], amounts[i], cities[i]].join(','));
+                res[i] = [names[i], times[i], amounts[i], cities[i]].join(',');
+                res[j] = [names[j], times[j], amounts[j], cities[j]].join(',');
                 break;
             }
         }
     }
+    
+    res = res.filter(x => x !== null);
     
     return res;
 };
