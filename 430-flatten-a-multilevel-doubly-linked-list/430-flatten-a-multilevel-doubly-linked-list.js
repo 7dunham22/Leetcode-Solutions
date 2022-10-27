@@ -13,20 +13,21 @@
  * @return {Node}
  */
 var flatten = function(head) {
-    let curr = head;
-    while (curr) {
-        if (curr.child) {
-            const next = curr.next;
-            const childBranch = flatten(curr.child);
-            let tail = childBranch;
-            while (tail.next) tail = tail.next;
-            curr.child = null;
-            curr.next = childBranch;
-            childBranch.prev = curr;
-            tail.next = next;
-            if (next) next.prev = tail;
+    
+    const dfs = (node, prev) => {
+        if (!node) return prev;
+        if (prev) {
+            node.prev = prev;
+            prev.next = node;
         }
-        curr = curr.next;
+        
+        const next = node.next;
+        const tail = dfs(node.child, node);
+        node.child = null;
+        return dfs(next, tail);
     }
+    
+    if (!head) return head;
+    dfs(head);
     return head;
 };
