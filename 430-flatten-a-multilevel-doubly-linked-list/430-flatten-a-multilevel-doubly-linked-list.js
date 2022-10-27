@@ -13,20 +13,20 @@
  * @return {Node}
  */
 var flatten = function(head) {
-    
-    const flatten_dfs = (prev,curr) => {
-        if (!curr) return prev;
-        curr.prev = prev;
-        prev.next = curr;
-        const tempNext = curr.next;
-        const childTail = flatten_dfs(curr, curr.child);
-        curr.child = null;
-        return flatten_dfs(childTail, tempNext);
+    let curr = head;
+    while (curr) {
+        if (curr.child) {
+            const next = curr.next;
+            const childBranch = flatten(curr.child);
+            let tail = childBranch;
+            while (tail.next) tail = tail.next;
+            curr.child = null;
+            curr.next = childBranch;
+            childBranch.prev = curr;
+            tail.next = next;
+            if (next) next.prev = tail;
+        }
+        curr = curr.next;
     }
-    
-    if (!head) return head;
-    const pseudo = new Node(0,null,head,null);
-    flatten_dfs(pseudo, head);
-    pseudo.next.prev = null;
-    return pseudo.next;
+    return head;
 };
